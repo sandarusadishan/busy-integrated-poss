@@ -17,3 +17,4 @@ class SearchQueryNotifier extends Notifier<String> {
     state = query;
   }
 }
+

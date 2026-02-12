@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../../../core/constants/app_colors.dart';
 import 'creative_controls.dart';
+import 'package:go_router/go_router.dart';
+
 
 class BusyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const BusyAppBar({super.key});
@@ -23,9 +25,29 @@ class BusyAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: Colors.white,
             letterSpacing: 0.5),
       ),
-      actions: const [
-        CreativeControls(),
-        SizedBox(width: 16),
+      actions: [
+        // POS Button
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              // Navigate to POS screen
+              context.push('/pos');  // Using GoRouter
+            },
+            icon: const Icon(Icons.point_of_sale, size: 18),
+            label: const Text('POS'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: AppColors.accent,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(6),
+              ),
+            ),
+          ),
+        ),
+        const CreativeControls(),
+        const SizedBox(width: 16),
       ],
     );
   }

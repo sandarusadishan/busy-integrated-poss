@@ -23,6 +23,7 @@ dependencies:
   google_fonts: ^6.1.0
   animations: ^2.1.1
   fluttertoast: ^9.0.0
+  data_table_2: ^2.7.2
 
 flutter:
   uses-material-design: true
