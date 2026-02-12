@@ -11,6 +11,10 @@ import 'package:busy_items_app/features/pos/presentation/widgets/cart/bottom_nav
 import 'package:busy_items_app/features/pos/presentation/widgets/items/pos_search_bar_section.dart';
 import 'package:busy_items_app/features/pos/presentation/widgets/items/pos_items_grid.dart';
 
+import 'package:printing/printing.dart';
+import 'package:busy_items_app/features/pos/presentation/utils/invoice_pdf.dart';
+
+
 class POSScreen extends ConsumerStatefulWidget {
   const POSScreen({super.key});
 
@@ -101,40 +105,71 @@ class _POSScreenState extends ConsumerState<POSScreen> {
     // (search clear is handled inside your search widget now, so no need here)
   }
 
-  void _completeSale(WidgetRef ref) {
-    final cartItems = ref.read(posCartProvider);
+void _completeSale(WidgetRef ref) async {
+  final cartItems = ref.read(posCartProvider);
 
-    if (cartItems.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Add items to cart first')),
-      );
-      return;
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Confirm Sale'),
-        content: Text('Total: Rs. ${_calculateTotal(cartItems).toStringAsFixed(2)}'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              ref.read(posCartProvider.notifier).clearCart();
-              Navigator.pop(context);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Sale completed successfully!')),
-              );
-            },
-            child: const Text('Confirm'),
-          ),
-        ],
-      ),
+  if (cartItems.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Add items to cart first')),
     );
+    return;
   }
+
+  final subtotal = _calculateTotal(cartItems);
+
+  // Confirm dialog
+  final ok = await showDialog<bool>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: const Text('Confirm Sale'),
+      content: Text(
+        'Total: Rs. ${subtotal.toStringAsFixed(2)}\nGenerate invoice & print?',
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context, false),
+          child: const Text('Cancel'),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context, true),
+          child: const Text('Print'),
+        ),
+      ],
+    ),
+  );
+
+  if (ok != true) return;
+
+  final now = DateTime.now();
+  final invoiceNo =
+      'INV-${now.millisecondsSinceEpoch.toString().substring(7)}';
+
+  // Build PDF bytes (your invoice builder)
+  final pdfBytes = await InvoicePdfHps.buildPdfBytes(
+    items: cartItems,
+    invoiceNo: invoiceNo,
+    dateTime: now,
+    customerName: "Walk-In Customer",
+    mobile: "",
+    subtotal: subtotal,
+    totalPaid: subtotal,
+    paymentLabel: "Cash",
+    companyName: "SOFTVISION IT GROUP (PVT) LTD",
+    addressLine: "Colombo, Colombo, Colombo, 122, SriLanka",
+  );
+
+  // Print (Web opens print dialog)
+  await Printing.layoutPdf(onLayout: (_) async => pdfBytes);
+
+  // Clear cart after printing
+  ref.read(posCartProvider.notifier).clearCart();
+
+  if (!mounted) return;
+
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(content: Text('Invoice $invoiceNo printed. Sale completed!')),
+  );
+}
 
   double _calculateTotal(List<CartItem> items) {
     return items.fold(0.0, (sum, cartItem) {

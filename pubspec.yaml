@@ -24,6 +24,8 @@ dependencies:
   animations: ^2.1.1
   fluttertoast: ^9.0.0
   data_table_2: ^2.7.2
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 flutter:
   uses-material-design: true
