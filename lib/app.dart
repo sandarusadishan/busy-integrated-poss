@@ -13,15 +13,8 @@ class MyApp extends ConsumerWidget {
 
     return MaterialApp.router(
       title: 'Busy Items Page',
-      theme: appTheme(), // Light Theme
-      darkTheme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF121212),
-        cardColor: const Color(0xFF1E1E1E),
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF004B8D),
-          brightness: Brightness.dark,
-        ),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
