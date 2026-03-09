@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/themes/app_theme.dart';
 import '../../../../core/ui/molecules/smart_table.dart';
-import '../../../../core/ui/organisms/pos_header.dart'; // Import POSHeader
+import '../../../../core/ui/organisms/busy_menu_header.dart'; // Import BusyMenuHeader
 import '../../../../core/ui/organisms/shortcut_panel.dart'; // Import ShortcutPanel
 import '../providers/items_provider.dart';
 
@@ -49,9 +49,10 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
         autofocus: true,
         child: Scaffold(
           backgroundColor: AppTheme.background,
-          appBar: const POSHeader(),
           body: Column(
             children: [
+              // Main Menu Header
+              const BusyMenuHeader(),
               // Top Control Bar
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -163,19 +164,24 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
                               label: 'Add Master',
                               onTap: () => _handleAddMaster(context)),
                           ShortcutItem(
-                              keyLabel: 'F5', label: 'List', onTap: () {}),
+                              keyLabel: 'F5',
+                              label: 'List',
+                              onTap: () => context.push('/items-list')),
                           ShortcutItem(
                               keyLabel: 'F6',
                               label: 'Add Receipt',
-                              onTap: () {}),
+                              onTap: () =>
+                                  context.push('/transaction/Receipt')),
                           ShortcutItem(
                               keyLabel: 'F8',
                               label: 'Add Sales',
-                              onTap: () => context.push('/sales-order')),
+                              onTap: () =>
+                                  context.push('/transaction/Sales-Order')),
                           ShortcutItem(
                               keyLabel: 'F9',
                               label: 'Add Purchase',
-                              onTap: () {}),
+                              onTap: () =>
+                                  context.push('/transaction/Purchase')),
                           // Add more shortcuts as seen in image
                         ],
                       ),
@@ -373,12 +379,10 @@ class _ItemsScreenState extends ConsumerState<ItemsScreen> {
   }
 
   void _handleAddItem(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("F2: Add Item Dialog Open")));
+    context.push('/item-master');
   }
 
   void _handleAddMaster(BuildContext context) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("F3: Add Master Dialog Open")));
+    context.push('/item-master');
   }
 }

@@ -9,7 +9,20 @@ class POSHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFF1565C0), // Blue 800
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Color(0xFF0F2027), Color(0xFF203A43), Color(0xFF2C5364)],
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          )
+        ],
+      ),
       padding: const EdgeInsets.symmetric(horizontal: 16),
       height: 56, // Standard AppBar height
       child: Row(
@@ -18,7 +31,7 @@ class POSHeader extends StatelessWidget implements PreferredSizeWidget {
           const Icon(Icons.point_of_sale, color: Colors.white, size: 28),
           const SizedBox(width: 12),
           const Text(
-            'BUSY POS',
+            'SVG POS',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,
@@ -27,18 +40,20 @@ class POSHeader extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
 
-          const VerticalDivider(
-              color: Colors.white24, indent: 12, endIndent: 12, width: 32),
+          Container(
+              width: 1,
+              margin: const EdgeInsets.symmetric(vertical: 12),
+              color: Colors.white24),
 
           // Navigation Items
           Expanded(
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                _buildNavItem(context, 'Items', Icons.inventory_2, '/'),
+                _buildNavItem(context, 'Items', Icons.inventory_2, '/items'),
                 const SizedBox(width: 8),
-                _buildNavItem(
-                    context, 'Sales', Icons.shopping_cart, '/sales-order'),
+                _buildNavItem(context, 'Sales', Icons.shopping_cart,
+                    '/transaction/Sales-Order'),
                 const SizedBox(width: 8),
                 _buildNavItem(
                     context, 'Reports', Icons.bar_chart, null), // Placeholder
@@ -95,13 +110,14 @@ class POSHeader extends StatelessWidget implements PreferredSizeWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        onTap: route != null ? () => context.go(route) : null,
+        onTap: route != null ? () => context.push(route) : null,
         borderRadius: BorderRadius.circular(4),
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
           decoration: BoxDecoration(
-            color:
-                isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+            color: isSelected
+                ? Colors.white.withValues(alpha: 0.2)
+                : Colors.transparent,
             borderRadius: BorderRadius.circular(4),
             border: isSelected ? Border.all(color: Colors.white30) : null,
           ),

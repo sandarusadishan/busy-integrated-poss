@@ -1,21 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
-import '../../../../core/ui/organisms/busy_menu_header.dart'; // Import BusyMenuHeader
-import '../../../../core/ui/organisms/shortcut_panel.dart'; // Import ShortcutPanel
+import '../../../../core/ui/organisms/busy_menu_header.dart';
+import '../../../../core/ui/organisms/shortcut_panel.dart';
 import '../../data/models/item.dart';
 
-class ModifyItemScreen extends StatefulWidget {
-  final Item item;
+class ItemMasterScreen extends StatefulWidget {
+  final Item? item; // null = Add mode, non-null = Modify mode
 
-  const ModifyItemScreen({super.key, required this.item});
+  const ItemMasterScreen({super.key, this.item});
 
   @override
-  State<ModifyItemScreen> createState() => _ModifyItemScreenState();
+  State<ItemMasterScreen> createState() => _ItemMasterScreenState();
 }
 
-class _ModifyItemScreenState extends State<ModifyItemScreen> {
-  // Controllers
+class _ItemMasterScreenState extends State<ItemMasterScreen> {
+  bool get _isModifyMode => widget.item != null;
+
+  // ── Controllers ──────────────────────────────────────────────────────────
   late TextEditingController _nameController;
   late TextEditingController _aliasController;
   late TextEditingController _printNameController;
@@ -25,39 +27,55 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
   late TextEditingController _opStockValueController;
   late TextEditingController _salesPriceController;
 
-  // Static/Placeholder controllers
   final TextEditingController _purcPriceController =
-      TextEditingController(text: '320.00');
+      TextEditingController(text: '0.00');
   final TextEditingController _mrpController =
-      TextEditingController(text: '380.00');
+      TextEditingController(text: '0.00');
   final TextEditingController _minSalesPriceController =
       TextEditingController(text: '0.00');
   final TextEditingController _selfValPriceController =
       TextEditingController(text: '0.00');
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _saleDiscController =
+      TextEditingController(text: '0.00');
+  final TextEditingController _purcDiscController =
+      TextEditingController(text: '0.00');
+  final TextEditingController _specifyDefaultMCController =
+      TextEditingController();
+  final TextEditingController _freezeMCController = TextEditingController();
 
-  // Toggles
-  final bool _setCriticalLevel = true;
-  final bool _dontMaintainStockBalance = false;
+  // ── Toggles ──────────────────────────────────────────────────────────────
+  // ignore: prefer_final_fields
+  bool _setCriticalLevel = true;
+  // ignore: prefer_final_fields
+  bool _dontMaintainStockBalance = false;
 
-  // Image Picker
+  // ── Image Picker ─────────────────────────────────────────────────────────
   XFile? _pickedImage;
   final ImagePicker _picker = ImagePicker();
 
   @override
   void initState() {
     super.initState();
-    _nameController = TextEditingController(text: widget.item.name);
-    _aliasController = TextEditingController(text: widget.item.alias);
-    _printNameController = TextEditingController(text: widget.item.name);
-    _groupController = TextEditingController(text: widget.item.parentGroup);
-    _unitController = TextEditingController(text: widget.item.unit);
-    _opStockQtyController =
-        TextEditingController(text: widget.item.quantity.toStringAsFixed(2));
+    final item = widget.item;
+    _nameController = TextEditingController(text: item?.name ?? '');
+    _aliasController = TextEditingController(text: item?.alias ?? '');
+    _printNameController = TextEditingController(text: item?.name ?? '');
+    _groupController = TextEditingController(text: item?.parentGroup ?? '');
+    _unitController = TextEditingController(text: item?.unit ?? '');
+    _opStockQtyController = TextEditingController(
+        text: item != null ? item.quantity.toStringAsFixed(2) : '0.00');
     _opStockValueController = TextEditingController(
-        text: (widget.item.price * widget.item.quantity).toStringAsFixed(2));
-    _salesPriceController =
-        TextEditingController(text: widget.item.price.toStringAsFixed(2));
+        text: item != null
+            ? (item.price * item.quantity).toStringAsFixed(2)
+            : '0.00');
+    _salesPriceController = TextEditingController(
+        text: item != null ? item.price.toStringAsFixed(2) : '0.00');
+
+    if (item != null) {
+      _purcPriceController.text = '0.00';
+      _mrpController.text = '0.00';
+    }
   }
 
   @override
@@ -75,35 +93,35 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
     _minSalesPriceController.dispose();
     _selfValPriceController.dispose();
     _descriptionController.dispose();
+    _saleDiscController.dispose();
+    _purcDiscController.dispose();
+    _specifyDefaultMCController.dispose();
+    _freezeMCController.dispose();
     super.dispose();
   }
 
   Future<void> _pickImage() async {
     try {
       final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
-      if (image != null) {
-        setState(() {
-          _pickedImage = image;
-        });
-      }
+      if (image != null) setState(() => _pickedImage = image);
     } catch (e) {
       debugPrint('Error picking image: $e');
     }
   }
 
+  // ── Build ─────────────────────────────────────────────────────────────────
   @override
   Widget build(BuildContext context) {
-    // Specific Colors from Screenshot - UPDATED to Blue Theme
-    const bgColor = Color(0xFFE3F2FD); // Light Blue 50
-    const titleBoxColor = Color(0xFF1565C0); // Blue 800
+    const bgColor = Color(0xFFE3F2FD);
+    const titleBoxColor = Color(0xFF1565C0);
 
     return Scaffold(
       backgroundColor: bgColor,
       body: Column(
         children: [
-          // Main Menu Header
+          // ── Main Menu Header ─────────────────────────────────────────────
           const BusyMenuHeader(),
-          // 2. Blue Title Box (Centered)
+          // ── Title Bar ────────────────────────────────────────────────────
           Container(
             width: double.infinity,
             alignment: Alignment.center,
@@ -111,9 +129,9 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
               color: titleBoxColor,
-              child: const Text(
-                'Modify Item Master',
-                style: TextStyle(
+              child: Text(
+                _isModifyMode ? 'Modify Item Master' : 'Add Item Master',
+                style: const TextStyle(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                     fontSize: 14),
@@ -121,19 +139,19 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
             ),
           ),
 
-          // 3. Main Content
+          // ── Main Content ─────────────────────────────────────────────────
           Expanded(
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                // Main Form Area
+                // ── Form (3 columns) ─────────────────────────────────────
                 Expanded(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.all(8.0),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Left Column
+                        // ── LEFT COLUMN ───────────────────────────────────
                         Expanded(
                           flex: 4,
                           child: Column(
@@ -148,17 +166,12 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                               const SizedBox(height: 8),
                               _buildGroupBox(
                                 title: 'Main Unit Details',
-                                child: Column(
-                                  children: [
-                                    _buildDenseRow('Unit', _unitController,
-                                        width: 60),
-                                  ],
-                                ),
+                                child: _buildDenseRow('Unit', _unitController,
+                                    width: 60),
                               ),
                               const SizedBox(height: 4),
                               Container(
-                                color: Colors.teal.withValues(
-                                    alpha: 0.1), // Highlight Op Stock
+                                color: Colors.teal.withValues(alpha: 0.1),
                                 padding: const EdgeInsets.all(4),
                                 child: Column(
                                   children: [
@@ -226,10 +239,10 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                               const Row(
                                 children: [
                                   SizedBox(
-                                      width: 100,
-                                      child: Text("Sales Account",
+                                      width: 110,
+                                      child: Text('Sales Account',
                                           style: TextStyle(fontSize: 12))),
-                                  Text("Specify Here",
+                                  Text('Specify Here',
                                       style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold)),
@@ -238,10 +251,10 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                               const Row(
                                 children: [
                                   SizedBox(
-                                      width: 100,
-                                      child: Text("Purchase Account",
+                                      width: 110,
+                                      child: Text('Purchase Account',
                                           style: TextStyle(fontSize: 12))),
-                                  Text("Specify Here",
+                                  Text('Specify Here',
                                       style: TextStyle(
                                           fontSize: 12,
                                           fontWeight: FontWeight.bold)),
@@ -250,8 +263,10 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                             ],
                           ),
                         ),
+
                         const SizedBox(width: 16),
-                        // Middle Column
+
+                        // ── MIDDLE COLUMN ─────────────────────────────────
                         Expanded(
                           flex: 5,
                           child: Column(
@@ -266,15 +281,13 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                         Expanded(
                                             child: _buildDenseRow(
                                                 'Sale Discount',
-                                                TextEditingController(
-                                                    text: '0.00'),
+                                                _saleDiscController,
                                                 labelWidth: 80)),
                                         const SizedBox(width: 8),
                                         Expanded(
                                             child: _buildDenseRow(
                                                 'Purc. Discount',
-                                                TextEditingController(
-                                                    text: '0.00'),
+                                                _purcDiscController,
                                                 labelWidth: 80)),
                                       ],
                                     ),
@@ -284,12 +297,12 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                       children: [
                                         Expanded(
                                             child: Text(
-                                                "Specify Sales Disc.Structure   N",
+                                                'Specify Sales Disc.Structure   N',
                                                 style:
                                                     TextStyle(fontSize: 12))),
                                         Expanded(
                                             child: Text(
-                                                "Specify Purc. Disc.Structure   N",
+                                                'Specify Purc. Disc.Structure   N',
                                                 style:
                                                     TextStyle(fontSize: 12))),
                                       ],
@@ -317,8 +330,10 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                 ),
                               ),
                               const SizedBox(height: 8),
-                              _buildToggleRow('Set Critical Level (Y/N)',
-                                  _setCriticalLevel),
+                              _buildToggleRow(
+                                  'Set Critical Level (Y/N)', _setCriticalLevel,
+                                  onToggle: () => setState(() =>
+                                      _setCriticalLevel = !_setCriticalLevel)),
                               const SizedBox(height: 8),
                               const Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -380,13 +395,13 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                               ),
                               const SizedBox(height: 12),
                               _buildDenseRow('Specify Default MC',
-                                  TextEditingController()),
-                              _buildDenseRow('Freeze MC for Item',
-                                  TextEditingController()),
+                                  _specifyDefaultMCController),
+                              _buildDenseRow(
+                                  'Freeze MC for Item', _freezeMCController),
                               Row(
                                 children: [
                                   const Text(
-                                      "Total No. of Authors      (Max. 10)",
+                                      'Total No. of Authors      (Max. 10)',
                                       style: TextStyle(
                                           fontSize: 11, color: Colors.grey)),
                                   const Spacer(),
@@ -398,30 +413,32 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                 ],
                               ),
                               const Text(
-                                  "Pick Item Sizing Info. from Item Description",
+                                  'Pick Item Sizing Info. from Item Description',
                                   style: TextStyle(
                                       fontSize: 11, color: Colors.grey)),
-                              const Text("Specify Default Vendor   N",
+                              const Text('Specify Default Vendor   N',
                                   style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold)),
-
                               const SizedBox(height: 20),
-                              // Save/Quit Buttons
+                              // ── Save / Quit ──
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  _buildActionButton('Save'),
+                                  _buildActionButton('Save',
+                                      onPressed: () => _handleSave(context)),
                                   const SizedBox(width: 8),
                                   _buildActionButton('Quit',
                                       onPressed: () => context.pop()),
                                 ],
-                              )
+                              ),
                             ],
                           ),
                         ),
+
                         const SizedBox(width: 16),
-                        // Right Column (Image/Extra Info)
+
+                        // ── RIGHT COLUMN — Image ───────────────────────────
                         Expanded(
                           flex: 3,
                           child: _buildGroupBox(
@@ -439,8 +456,9 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                   child: _pickedImage != null
                                       ? Image.network(_pickedImage!.path,
                                           fit: BoxFit.contain)
-                                      : widget.item.imageUrl.isNotEmpty
-                                          ? Image.network(widget.item.imageUrl,
+                                      : (widget.item?.imageUrl.isNotEmpty ==
+                                              true
+                                          ? Image.network(widget.item!.imageUrl,
                                               fit: BoxFit.contain)
                                           : const Center(
                                               child: Column(
@@ -458,7 +476,7 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                                           fontSize: 12)),
                                                 ],
                                               ),
-                                            ),
+                                            )),
                                 ),
                                 const SizedBox(height: 12),
                                 Row(
@@ -467,11 +485,9 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                                     _buildActionButton('Browse...',
                                         onPressed: _pickImage),
                                     const SizedBox(width: 8),
-                                    _buildActionButton('Clear', onPressed: () {
-                                      setState(() {
-                                        _pickedImage = null;
-                                      });
-                                    }),
+                                    _buildActionButton('Clear',
+                                        onPressed: () => setState(
+                                            () => _pickedImage = null)),
                                   ],
                                 ),
                               ],
@@ -483,43 +499,30 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                   ),
                 ),
 
-                // 4. Sidebar (Shortcut Keys)
-                // 4. Sidebar (Shortcut Keys)
+                // ── Shortcut Sidebar ─────────────────────────────────────
                 ShortcutPanel(
                   items: [
                     ShortcutItem(keyLabel: 'F1', label: 'Help', onTap: () {}),
                     ShortcutItem(
-                        keyLabel: 'F1',
-                        label: 'Add Account',
-                        onTap: () => context.push('/items')),
+                        keyLabel: 'F1', label: 'Add Account', onTap: () {}),
                     ShortcutItem(
-                        keyLabel: 'F2',
-                        label: 'Add Item',
-                        onTap: () => context.push('/item-master')),
+                        keyLabel: 'F2', label: 'Add Item', onTap: () {}),
                     ShortcutItem(
                         keyLabel: 'F3', label: 'Add Master', onTap: () {}),
                     ShortcutItem(
                         keyLabel: 'F3', label: 'Add Voucher', onTap: () {}),
                     ShortcutItem(
-                        keyLabel: 'F5',
-                        label: 'Add Payment',
-                        onTap: () => context.push('/transaction/Payment')),
+                        keyLabel: 'F5', label: 'Add Payment', onTap: () {}),
                     ShortcutItem(
-                        keyLabel: 'F6',
-                        label: 'Add Receipt',
-                        onTap: () => context.push('/transaction/Receipt')),
+                        keyLabel: 'F6', label: 'Add Receipt', onTap: () {}),
                     ShortcutItem(
-                        keyLabel: 'F7',
-                        label: 'Add Journal',
-                        onTap: () => context.push('/transaction/Journal')),
+                        keyLabel: 'F7', label: 'Add Journal', onTap: () {}),
                     ShortcutItem(
                         keyLabel: 'F8',
                         label: 'Add Sales',
-                        onTap: () => context.push('/transaction/Sales')),
+                        onTap: () => context.push('/sales-order')),
                     ShortcutItem(
-                        keyLabel: 'F9',
-                        label: 'Add Purchase',
-                        onTap: () => context.push('/transaction/Purchase')),
+                        keyLabel: 'F9', label: 'Add Purchase', onTap: () {}),
                     ShortcutItem(
                         keyLabel: 'B', label: 'Balance Sheet', onTap: () {}),
                     ShortcutItem(
@@ -527,13 +530,13 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                     ShortcutItem(
                         keyLabel: 'S', label: 'Stock Status', onTap: () {}),
                   ],
-                  onHelp: () {}, // Training Videos
+                  onHelp: () {},
                 ),
               ],
             ),
           ),
 
-          // 5. Bottom Status Bar
+          // ── Bottom Status Bar ─────────────────────────────────────────────
           Container(
             height: 24,
             padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -553,13 +556,35 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
                 _buildStatusItem('Listening Port : 981'),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 
-  // --- Helpers ---
+  // ── Logic ─────────────────────────────────────────────────────────────────
+
+  void _handleSave(BuildContext context) {
+    if (_nameController.text.trim().isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Item Name is required!'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            '${_isModifyMode ? "Item updated" : "Item saved"}: ${_nameController.text}'),
+        backgroundColor: const Color(0xFF2E7D32),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  // ── Helper Widgets ────────────────────────────────────────────────────────
 
   Widget _buildActionButton(String label, {VoidCallback? onPressed}) {
     return SizedBox(
@@ -599,11 +624,11 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
           top: 0,
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 4),
-            color: const Color(0xFFE3F2FD), // Match background (Light Blue 50)
+            color: const Color(0xFFE3F2FD),
             child: Text(
               title,
               style: TextStyle(
-                  color: Colors.blue[800], // Blue title color
+                  color: Colors.blue[800],
                   fontSize: 11,
                   fontWeight: FontWeight.bold),
             ),
@@ -639,7 +664,7 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
 
   Widget _buildDenseInput(TextEditingController controller) {
     return SizedBox(
-      height: 20, // Very small height
+      height: 20,
       child: TextField(
         controller: controller,
         style: const TextStyle(fontSize: 12, color: Colors.black),
@@ -647,8 +672,8 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
           isDense: true,
           contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 0),
           filled: true,
-          fillColor: Colors.white, // White background
-          border: InputBorder.none, // No complex border
+          fillColor: Colors.white,
+          border: InputBorder.none,
           focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(color: Colors.blue, width: 1)),
         ),
@@ -671,13 +696,17 @@ class _ModifyItemScreenState extends State<ModifyItemScreen> {
     );
   }
 
-  Widget _buildToggleRow(String label, bool value) {
+  Widget _buildToggleRow(String label, bool value, {VoidCallback? onToggle}) {
     return Row(
       children: [
         Text(label, style: const TextStyle(fontSize: 12)),
         const SizedBox(width: 16),
-        const Text("Y",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        GestureDetector(
+          onTap: onToggle,
+          child: Text(value ? 'Y' : 'N',
+              style:
+                  const TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+        ),
         const SizedBox(width: 4),
         const Icon(Icons.arrow_drop_down, size: 16),
       ],
