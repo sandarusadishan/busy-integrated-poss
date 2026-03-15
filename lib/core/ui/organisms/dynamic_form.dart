@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../atoms/busy_input.dart';
+import '../atoms/Busy_input.dart';
 
 /// A widget that takes a JSON-like configuration and automatically renders a grid of [BusyInput] fields.
 ///

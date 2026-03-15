@@ -31,7 +31,7 @@ class POSHeader extends StatelessWidget implements PreferredSizeWidget {
           const Icon(Icons.point_of_sale, color: Colors.white, size: 28),
           const SizedBox(width: 12),
           const Text(
-            'SVG POS',
+            'Busy POS',
             style: TextStyle(
               color: Colors.white,
               fontSize: 20,

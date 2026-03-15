@@ -13,7 +13,7 @@ class OpenCompanyDialog extends StatefulWidget {
 class _OpenCompanyDialogState extends State<OpenCompanyDialog> {
   final List<Map<String, String>> _companies = [
     {'name': 'Savibala Hardware', 'code': 'Comp0001'},
-    {'name': 'SVG POS Demo', 'code': 'Comp0002'},
+    {'name': 'Busy POS Demo', 'code': 'Comp0002'},
   ];
 
   int _selectedIndex = 0;
@@ -315,7 +315,7 @@ class _CompanyLoginDialogState extends ConsumerState<_CompanyLoginDialog> {
     final user = _usernameCtrl.text.trim();
     final pass = _passwordCtrl.text;
 
-    if (user.toLowerCase() == 'busy' && pass == 'busy') {
+    if (user.toLowerCase() == 'busy' && pass.toLowerCase() == 'busy') {
       ref.read(authProvider.notifier).login(widget.company);
       Navigator.of(context).pop();
       ScaffoldMessenger.of(context).showSnackBar(

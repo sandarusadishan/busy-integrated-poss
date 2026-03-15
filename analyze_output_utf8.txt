@@ -1,0 +1,11 @@
+﻿Analyzing busy_items_app...                                     
+
+   info - The imported package 'Busy_items_app' isn't a dependency of the importing package - test\widget_test.dart:4:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:Busy_items_app/features/items/presentation/screens/item_master_screen.dart' - test\widget_test.dart:4:8 - uri_does_not_exist
+   info - The imported package 'Busy_items_app' isn't a dependency of the importing package - test\widget_test.dart:5:8 - depend_on_referenced_packages
+  error - Target of URI doesn't exist: 'package:Busy_items_app/features/items/presentation/screens/items_list_screen.dart' - test\widget_test.dart:5:8 - uri_does_not_exist
+  error - Invalid constant value - test\widget_test.dart:10:54 - invalid_constant
+  error - The function 'ItemMasterScreen' isn't defined - test\widget_test.dart:10:54 - undefined_function
+  error - Invalid constant value - test\widget_test.dart:15:54 - invalid_constant
+  error - The function 'ItemsListScreen' isn't defined - test\widget_test.dart:15:54 - undefined_function
+

@@ -1,4 +1,4 @@
-﻿00:00 +0: loading D:/SVG-web sites/flutter/busy_items_app/test/widget_test.dart
+﻿00:00 +0: loading D:/Busy-web sites/flutter/Busy_items_app/test/widget_test.dart
 00:00 +0: Test Master Screen
 ΓòÉΓòÉΓòí EXCEPTION CAUGHT BY RENDERING LIBRARY Γò₧ΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉΓòÉ
 The following assertion was thrown during layout:
@@ -6,7 +6,7 @@ A RenderFlex overflowed by 84 pixels on the right.
 
 The relevant error-causing widget was:
   DropdownButtonFormField<String>
-  DropdownButtonFormField:file:///D:/SVG-web%20sites/flutter/busy_items_app/lib/features/items/presentation/screens/item_master_screen.dart:890:18
+  DropdownButtonFormField:file:///D:/Busy-web%20sites/flutter/Busy_items_app/lib/features/items/presentation/screens/item_master_screen.dart:890:18
 
 The overflowing RenderFlex has an orientation of Axis.horizontal.
 The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
@@ -38,7 +38,7 @@ A RenderFlex overflowed by 146 pixels on the right.
 
 The relevant error-causing widget was:
   Row
-  Row:file:///D:/SVG-web%20sites/flutter/busy_items_app/lib/features/items/presentation/screens/item_master_screen.dart:509:20
+  Row:file:///D:/Busy-web%20sites/flutter/Busy_items_app/lib/features/items/presentation/screens/item_master_screen.dart:509:20
 
 The overflowing RenderFlex has an orientation of Axis.horizontal.
 The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
@@ -71,7 +71,7 @@ A RenderFlex overflowed by 49 pixels on the right.
 
 The relevant error-causing widget was:
   Row
-  Row:file:///D:/SVG-web%20sites/flutter/busy_items_app/lib/core/ui/organisms/shortcut_panel.dart:49:14
+  Row:file:///D:/Busy-web%20sites/flutter/Busy_items_app/lib/core/ui/organisms/shortcut_panel.dart:49:14
 
 The overflowing RenderFlex has an orientation of Axis.horizontal.
 The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
@@ -113,7 +113,7 @@ A RenderFlex overflowed by 11 pixels on the right.
 
 The relevant error-causing widget was:
   Row
-  Row:file:///D:/SVG-web%20sites/flutter/busy_items_app/lib/features/items/presentation/screens/items_list_screen.dart:107:24
+  Row:file:///D:/Busy-web%20sites/flutter/Busy_items_app/lib/features/items/presentation/screens/items_list_screen.dart:107:24
 
 The overflowing RenderFlex has an orientation of Axis.horizontal.
 The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
@@ -147,7 +147,7 @@ A RenderFlex overflowed by 49 pixels on the right.
 
 The relevant error-causing widget was:
   Row
-  Row:file:///D:/SVG-web%20sites/flutter/busy_items_app/lib/core/ui/organisms/shortcut_panel.dart:49:14
+  Row:file:///D:/Busy-web%20sites/flutter/Busy_items_app/lib/core/ui/organisms/shortcut_panel.dart:49:14
 
 The overflowing RenderFlex has an orientation of Axis.horizontal.
 The edge of the RenderFlex that is overflowing has been marked in the rendering with a yellow and
