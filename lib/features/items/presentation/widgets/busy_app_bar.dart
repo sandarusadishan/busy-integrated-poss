@@ -31,24 +31,29 @@ class BusyAppBar extends StatelessWidget implements PreferredSizeWidget {
           margin: const EdgeInsets.only(right: 8),
           child: ElevatedButton.icon(
             onPressed: () {
-              // Navigate to POS screen
-              context.push('/pos');  // Using GoRouter
+              context.push('/pos');
             },
             icon: const Icon(Icons.point_of_sale, size: 18),
             label: const Text('POS'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.accent,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
-            ),
           ),
         ),
+
+        // ✅ Shared Screen Button
+        Container(
+          margin: const EdgeInsets.only(right: 8),
+          child: ElevatedButton.icon(
+            onPressed: () {
+              context.push('/shared');
+            },
+            icon: const Icon(Icons.table_chart, size: 18),
+            label: const Text('Table'),
+          ),
+        ),
+
         const CreativeControls(),
         const SizedBox(width: 16),
       ],
+
     );
   }
 
