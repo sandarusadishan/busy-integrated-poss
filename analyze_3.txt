@@ -1,0 +1,5 @@
+﻿Analyzing busy_items_app...                                     
+
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\sales\presentation\screens\list_receipt_screen.dart:59:56 - deprecated_member_use
+   info - 'withOpacity' is deprecated and shouldn't be used. Use .withValues() to avoid precision loss - lib\features\sales\presentation\screens\modify_receipt_screen.dart:64:56 - deprecated_member_use
+

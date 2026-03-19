@@ -4,7 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../items/data/dummy/dummy_items.dart';
 import '../../../items/data/models/item.dart';
-import '../../../../core/ui/organisms/Busy_menu_header.dart'; // Import BusyMenuHeader
+import '../../../../core/ui/organisms/busy_menu_header.dart'; // Import BusyMenuHeader
 import '../../data/models/sales_order_item.dart';
 
 class SalesOrderScreen extends StatefulWidget {
@@ -690,8 +690,9 @@ class _SalesOrderScreenState extends State<SalesOrderScreen> {
     double totalQty = _items.fold(0, (sum, item) => sum + item.quantity);
     double totalAmount = _items.fold(0, (sum, item) => sum + item.amount);
 
+    const bgColor = Color(0xFFE3F2FD);
     return Scaffold(
-      backgroundColor: const Color(0xFFE3F2FD), // Light Blue 50
+      backgroundColor: bgColor, // Light Blue 50
       appBar: const BusyMenuHeader(),
       body: Column(
         children: [

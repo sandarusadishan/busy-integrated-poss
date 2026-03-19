@@ -23,23 +23,48 @@ const List<MenuNode> appMenus = [
       MenuNode(
         title: 'Masters',
         children: [
-          MenuNode(title: 'Account', route: '/items'),
-          MenuNode(title: 'Account Group'),
+          MenuNode(title: 'Account', children: [
+            MenuNode(title: 'Add', route: '/add-account'),
+            MenuNode(title: 'Modify', route: '/modify-account'),
+            MenuNode(title: 'List'),
+          ]),
+          MenuNode(title: 'Account Group', children: [
+            MenuNode(title: 'Add', route: '/add-account-group'),
+            MenuNode(title: 'Modify', route: '/modify-account-group'),
+            MenuNode(title: 'List', route: '/list-account-group'),
+          ]),
           MenuNode(title: 'Std. Narration'),
+          MenuNode(title: 'o'),
           MenuNode(title: 'Item', children: [
             MenuNode(title: 'Add', route: '/item-master'),
             MenuNode(title: 'Modify', route: '/modify-item'),
             MenuNode(title: 'List', route: '/items-list'),
           ]),
-          MenuNode(title: 'Item Group', route: '/items-list'),
+          MenuNode(title: 'Item Group', children: [
+            MenuNode(title: 'Add'),
+            MenuNode(title: 'Modify'),
+            MenuNode(title: 'List'),
+          ]),
           MenuNode(title: 'Material Centre'),
           MenuNode(title: 'Material Centre Group'),
           MenuNode(title: 'Unit'),
           MenuNode(title: 'Unit Conversion'),
           MenuNode(title: 'Bill Sundry'),
           MenuNode(title: 'Bill of Material'),
+          MenuNode(title: 'o'),
           MenuNode(title: 'Misc. Masters'),
-          MenuNode(title: 'Bulk Updation'),
+          MenuNode(title: 'o'),
+          MenuNode(title: 'Bulk Updation', children: [
+            MenuNode(
+                title: 'Multiple Account Creation/Modification',
+                route: '/bulk-update-account'),
+            MenuNode(
+                title: 'Multiple Item Creation/Modification',
+                route: '/bulk-update-item'),
+            MenuNode(
+                title: 'Multiple Tax Category Creation/Modification',
+                route: '/bulk-update-tax'),
+          ]),
         ],
       ),
       MenuNode(title: 'Configuration'),
@@ -101,9 +126,9 @@ const List<MenuNode> appMenus = [
         MenuNode(title: 'List'),
       ]),
       MenuNode(title: 'Receipt', children: [
-        MenuNode(title: 'Add', route: '/transaction/Receipt'),
-        MenuNode(title: 'Modify'),
-        MenuNode(title: 'List'),
+        MenuNode(title: 'Add', route: '/receipt/add'),
+        MenuNode(title: 'Modify', route: '/receipt/modify'),
+        MenuNode(title: 'List', route: '/receipt/list'),
       ]),
       MenuNode(title: 'Journal', children: [
         MenuNode(title: 'Add', route: '/transaction/Journal'),

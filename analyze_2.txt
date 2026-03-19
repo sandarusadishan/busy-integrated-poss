@@ -1,0 +1,28 @@
+﻿Analyzing busy_items_app...                                     
+
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_account_screen.dart:72:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_account_screen.dart:73:41 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_account_screen.dart:82:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_account_screen.dart:83:41 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_account_screen.dart:213:33 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_account_screen.dart:214:45 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_account_screen.dart:282:24 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_account_screen.dart:284:29 - prefer_const_literals_to_create_immutables
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_item_screen.dart:71:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_item_screen.dart:72:41 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_item_screen.dart:81:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_item_screen.dart:82:41 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_item_screen.dart:230:33 - prefer_const_constructors
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_item_screen.dart:233:42 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_item_screen.dart:234:47 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_item_screen.dart:253:33 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_item_screen.dart:254:45 - prefer_const_literals_to_create_immutables
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_item_screen.dart:322:24 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_item_screen.dart:324:29 - prefer_const_literals_to_create_immutables
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:71:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:72:41 - deprecated_member_use
+   info - 'groupValue' is deprecated and shouldn't be used. Use a RadioGroup ancestor to manage group value instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:81:41 - deprecated_member_use
+   info - 'onChanged' is deprecated and shouldn't be used. Use RadioGroup to handle value change instead. This feature was deprecated after v3.32.0-0.0.pre - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:82:41 - deprecated_member_use
+   info - Use 'const' with the constructor to improve performance - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:266:24 - prefer_const_constructors
+   info - Use 'const' literals as arguments to constructors of '@immutable' classes - lib\features\items\presentation\screens\bulk_update_tax_screen.dart:268:29 - prefer_const_literals_to_create_immutables
+
