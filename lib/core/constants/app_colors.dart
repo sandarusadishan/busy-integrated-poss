@@ -2,15 +2,13 @@ import 'package:flutter/material.dart';
 
 class AppColors {
   // Busy Software Corporate Blue Theme
-  static const primary = Color(0xFF004B8D); // Deep Corporate Blue
-  static const primaryLight =
-      Color(0xFF0066B3); // Lighter shade for interactions
+  static const primary = Color(0xFF90CAF9); // Light Blue from image
+  static const primaryLight = Color(0xFFE3F2FD); // Very Light Blue shade
   static const primaryDark = Color(0xFF003366); // Darker shade for contrast
 
   static const accent = Color(0xFFFFA000); // Amber/Gold for highlights/actions
 
-  static const background =
-      Color(0xFFF0F2F5); // Light Gray-Blue background (modern enterprise)
+  static const background = Color(0xFFD1E4F3); // Blue theme background matching image
   static const panelBg = Color(0xFFE3E8EE); // Slightly darker panel background
 
   static const tableHeader = Color(0xFFD6DCE5); // Table header background

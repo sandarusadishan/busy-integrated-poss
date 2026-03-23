@@ -14,6 +14,12 @@ import '../features/items/presentation/screens/modify_account_screen.dart';
 import '../features/items/presentation/screens/add_account_group_screen.dart';
 import '../features/items/presentation/screens/modify_account_group_screen.dart';
 import '../features/items/presentation/screens/list_account_group_screen.dart';
+import '../features/items/presentation/screens/add_material_centre_screen.dart';
+import '../features/items/presentation/screens/modify_material_centre_screen.dart';
+import '../features/items/presentation/screens/list_material_centre_screen.dart';
+import '../features/items/presentation/screens/add_unit_screen.dart';
+import '../features/items/presentation/screens/modify_unit_screen.dart';
+import '../features/items/presentation/screens/list_unit_screen.dart';
 import '../features/items/presentation/screens/bulk_update_account_screen.dart';
 import '../features/items/presentation/screens/bulk_update_item_screen.dart';
 import '../features/items/presentation/screens/bulk_update_tax_screen.dart';
@@ -52,6 +58,30 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/list-account-group',
       builder: (context, state) => const ListAccountGroupScreen(),
+    ),
+    GoRoute(
+      path: '/material-centre/add',
+      builder: (context, state) => const AddMaterialCentreScreen(),
+    ),
+    GoRoute(
+      path: '/material-centre/modify',
+      builder: (context, state) => const ModifyMaterialCentreScreen(),
+    ),
+    GoRoute(
+      path: '/material-centre/list',
+      builder: (context, state) => const ListMaterialCentreScreen(),
+    ),
+    GoRoute(
+      path: '/unit/add',
+      builder: (context, state) => const AddUnitScreen(),
+    ),
+    GoRoute(
+      path: '/unit/modify',
+      builder: (context, state) => const ModifyUnitScreen(),
+    ),
+    GoRoute(
+      path: '/unit/list',
+      builder: (context, state) => const ListUnitScreen(),
     ),
     GoRoute(
       path: '/bulk-update-account',

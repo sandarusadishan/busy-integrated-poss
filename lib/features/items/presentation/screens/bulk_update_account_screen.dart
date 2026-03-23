@@ -1,9 +1,10 @@
-// ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables
+// ignore_for_file: deprecated_member_use, prefer_const_constructors, prefer_const_literals_to_create_immutables, prefer_const_declarations
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class BulkUpdateAccountScreen extends StatefulWidget {
   const BulkUpdateAccountScreen({super.key});
@@ -19,7 +20,7 @@ class _BulkUpdateAccountScreenState extends State<BulkUpdateAccountScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const bgColor = Color(0xFFECEDF5);
+    final bgColor = AppColors.background;
 
     return Scaffold(
         backgroundColor: bgColor,
