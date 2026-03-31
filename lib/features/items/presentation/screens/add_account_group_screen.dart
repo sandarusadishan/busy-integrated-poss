@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class AddAccountGroupScreen extends StatefulWidget {
   const AddAccountGroupScreen({super.key});
@@ -70,22 +71,15 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.only(left: 20, top: 20),
+                    child: ResponsiveScrollWrapper(
+                      minWidth: 500,
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 20, top: 20),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            width: 500,
-                            height: 350,
-                            decoration: BoxDecoration(
-                                color: formBgColor,
-                                border:
-                                    Border.all(color: Colors.black, width: 1),
-                                boxShadow: const [
-                                  BoxShadow(
-                                      color: Colors.grey, offset: Offset(2, 2)),
-                                ]),
+                          ResponsiveFormContainer(
+                            maxWidth: 500,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
@@ -133,8 +127,8 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
                                     ],
                                   ),
                                 ),
-
-                                const Spacer(),
+                                // Spacer removed for mobile flexibility
+                                const SizedBox(height: 20),
                                 // Buttons
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -152,8 +146,9 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
                       ),
                     ),
                   ),
+                ),
 
-                  // Shortcut Sidebar
+                // Shortcut Sidebar
                   ShortcutPanel(
                     items: [
                       ShortcutItem(keyLabel: 'F1', label: 'Help', onTap: () {}),
@@ -203,6 +198,38 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
 
   Widget _buildFieldRow(String label, TextEditingController controller,
       {double width = 150}) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+    
+    Widget inputField = SizedBox(
+      width: isMobile ? double.infinity : width,
+      height: 20,
+      child: TextField(
+        controller: controller,
+        textInputAction: TextInputAction.next,
+        onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+        style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        decoration: InputDecoration(
+          isDense: true,
+          contentPadding: EdgeInsets.zero,
+          border: isMobile ? const UnderlineInputBorder() : InputBorder.none,
+        ),
+      ),
+    );
+
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.blue)),
+            const SizedBox(height: 4),
+            inputField,
+          ],
+        ),
+      );
+    }
+
     return Row(
       children: [
         SizedBox(
@@ -210,21 +237,7 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
           child: Text(label,
               style: const TextStyle(fontSize: 12, color: Colors.black87)),
         ),
-        SizedBox(
-          width: width,
-          height: 20,
-          child: TextField(
-            controller: controller,
-            textInputAction: TextInputAction.next,
-            onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-            decoration: const InputDecoration(
-              isDense: true,
-              contentPadding: EdgeInsets.zero,
-              border: InputBorder.none,
-            ),
-          ),
-        ),
+        inputField,
       ],
     );
   }
@@ -360,6 +373,57 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
 
   Widget _buildToggleRow(String label, TextEditingController controller,
       {double width = 150}) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+      
+    Widget inputField = SizedBox(
+      width: isMobile ? double.infinity : width,
+      height: 20,
+      child: Focus(
+        onKeyEvent: (node, event) {
+          if (event is KeyDownEvent &&
+              event.logicalKey == LogicalKeyboardKey.space) {
+            setState(() {
+              controller.text = controller.text == 'Y' ? 'N' : 'Y';
+            });
+            return KeyEventResult.handled;
+          }
+          return KeyEventResult.ignored;
+        },
+        child: TextField(
+          controller: controller,
+          textInputAction: TextInputAction.next,
+          onSubmitted: (_) => FocusScope.of(context).nextFocus(),
+          readOnly: true, // User only toggles with space
+          style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.blue),
+          decoration: InputDecoration(
+            isDense: true,
+            contentPadding: EdgeInsets.zero,
+            border: isMobile ? const UnderlineInputBorder() : InputBorder.none,
+            suffixIcon: isMobile 
+              ? IconButton(
+                  icon: const Icon(Icons.swap_horiz, size: 16),
+                  onPressed: () => setState(() => controller.text = controller.text == 'Y' ? 'N' : 'Y')
+                )
+              : null,
+          ),
+        ),
+      ),
+    );
+
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 12.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.blue)),
+            const SizedBox(height: 4),
+            inputField,
+          ],
+        ),
+      );
+    }
+
     return Row(
       children: [
         SizedBox(
@@ -367,34 +431,7 @@ class _AddAccountGroupScreenState extends State<AddAccountGroupScreen> {
           child: Text(label,
               style: const TextStyle(fontSize: 12, color: Colors.black87)),
         ),
-        SizedBox(
-          width: width,
-          height: 20,
-          child: Focus(
-            onKeyEvent: (node, event) {
-              if (event is KeyDownEvent &&
-                  event.logicalKey == LogicalKeyboardKey.space) {
-                setState(() {
-                  controller.text = controller.text == 'Y' ? 'N' : 'Y';
-                });
-                return KeyEventResult.handled;
-              }
-              return KeyEventResult.ignored;
-            },
-            child: TextField(
-              controller: controller,
-              textInputAction: TextInputAction.next,
-              onSubmitted: (_) => FocusScope.of(context).nextFocus(),
-              readOnly: true, // User only toggles with space
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-              decoration: const InputDecoration(
-                isDense: true,
-                contentPadding: EdgeInsets.zero,
-                border: InputBorder.none,
-              ),
-            ),
-          ),
-        ),
+        inputField,
       ],
     );
   }

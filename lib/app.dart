@@ -13,7 +13,7 @@ class MyApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
 
     return MaterialApp.router(
-      title: 'Busy Items Page',
+      title: 'SVG Accounting Software',
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: themeMode,
@@ -23,20 +23,13 @@ class MyApp extends ConsumerWidget {
         return CallbackShortcuts(
           bindings: {
             const SingleActivator(LogicalKeyboardKey.escape): () {
-              final ctx = rootNavigatorKey.currentContext;
-              if (ctx == null) return;
-
-              if (Navigator.of(ctx).canPop()) {
-                Navigator.of(ctx).pop();
+              final router = appRouter;
+              // Use GoRouter's pop — goes back exactly ONE step in the navigation stack
+              if (router.canPop()) {
+                router.pop();
               } else {
-                final currentPath = appRouter
-                    .routerDelegate.currentConfiguration.uri
-                    .toString();
-                if (currentPath == '/') {
-                  _showExitDialog(ctx);
-                } else {
-                  appRouter.go('/');
-                }
+                final ctx = rootNavigatorKey.currentContext;
+                if (ctx != null) _showExitDialog(ctx);
               }
             },
           },

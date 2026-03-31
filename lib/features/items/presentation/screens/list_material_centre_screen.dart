@@ -5,6 +5,7 @@ import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class ListMaterialCentreScreen extends StatefulWidget {
   const ListMaterialCentreScreen({super.key});
@@ -36,8 +37,10 @@ class _ListMaterialCentreScreenState extends State<ListMaterialCentreScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    child: ResponsiveScrollWrapper(
+                      minWidth: 600,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           Container(
@@ -102,7 +105,8 @@ class _ListMaterialCentreScreenState extends State<ListMaterialCentreScreen> {
                       ),
                     ),
                   ),
-                  ShortcutPanel(
+                ),
+                ShortcutPanel(
                     items: [
                       ShortcutItem(keyLabel: 'F1', label: 'Help', onTap: () {}),
                       ShortcutItem(keyLabel: 'F2', label: 'Add Item', onTap: () {}),

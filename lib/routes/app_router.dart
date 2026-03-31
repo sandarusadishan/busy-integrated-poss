@@ -23,6 +23,9 @@ import '../features/items/presentation/screens/list_unit_screen.dart';
 import '../features/items/presentation/screens/bulk_update_account_screen.dart';
 import '../features/items/presentation/screens/bulk_update_item_screen.dart';
 import '../features/items/presentation/screens/bulk_update_tax_screen.dart';
+import '../features/configuration/presentation/screens/features_options_screen.dart';
+import '../features/configuration/presentation/screens/regional_settings_screen.dart';
+import '../features/configuration/presentation/screens/display_settings_screen.dart';
 import '../features/items/data/models/item.dart';
 
 final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
@@ -94,6 +97,18 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/bulk-update-tax',
       builder: (context, state) => const BulkUpdateTaxScreen(),
+    ),
+    GoRoute(
+      path: '/configuration/features-options',
+      builder: (context, state) => const FeaturesOptionsScreen(),
+    ),
+    GoRoute(
+      path: '/configuration/regional-settings',
+      builder: (context, state) => const RegionalSettingsScreen(),
+    ),
+    GoRoute(
+      path: '/configuration/display-settings',
+      builder: (context, state) => const DisplaySettingsScreen(),
     ),
     GoRoute(
       path: '/items-list',

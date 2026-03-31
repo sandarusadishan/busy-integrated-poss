@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class AccountMasterScreen extends StatefulWidget {
   const AccountMasterScreen({super.key});
@@ -114,18 +115,19 @@ class _AccountMasterScreenState extends State<AccountMasterScreen> {
 
             // ── Main Content ─────────────────────────────────────────────────
             Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ResponsiveScrollWrapper(
+                minWidth: 1000,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   // ── Form (3 columns) ─────────────────────────────────────
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                      child: ResponsiveFlexRow(
+                        columns: [
                           // ── LEFT COLUMN: General Info ─────────────────────
-                          Expanded(
+                          ResponsiveFlexColumn(
                             flex: 12,
                             child: _buildGroupBox(
                               title: 'General Info.',
@@ -246,7 +248,7 @@ class _AccountMasterScreenState extends State<AccountMasterScreen> {
                           ),
 
                           // ── MIDDLE COLUMN: Other Info ──────────────────────
-                          Expanded(
+                          ResponsiveFlexColumn(
                             flex: 8,
                             child: _buildGroupBox(
                               title: 'Other Info',
@@ -304,7 +306,7 @@ class _AccountMasterScreenState extends State<AccountMasterScreen> {
                           ),
 
                           // ── RIGHT COLUMN: Extra Info ───────────────────────
-                          Expanded(
+                          ResponsiveFlexColumn(
                             flex: 8,
                             child: _buildGroupBox(
                               title: 'Extra Info.',
@@ -384,6 +386,7 @@ class _AccountMasterScreenState extends State<AccountMasterScreen> {
                   ),
                 ],
               ),
+            ),
             ),
 
             // ── Bottom Buttons ─────────────────────────────────────────────

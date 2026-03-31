@@ -1,0 +1,10 @@
+﻿Analyzing busy_items_app...                                     
+
+   info - The import of 'package:flutter/services.dart' is unnecessary because all of the used elements are also provided by the import of 'package:flutter/material.dart' - lib\core\ui\organisms\busy_menu_header.dart:3:8 - unnecessary_import
+   info - Unnecessary 'const' keyword - lib\core\ui\organisms\menu_config.dart:140:7 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\core\ui\organisms\menu_config.dart:162:7 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\core\ui\organisms\menu_config.dart:193:7 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\core\ui\organisms\menu_config.dart:210:7 - unnecessary_const
+   info - Unnecessary 'const' keyword - lib\core\ui\organisms\menu_config.dart:221:7 - unnecessary_const
+warning - The value of the local variable 'formBgColor' isn't used - lib\features\items\presentation\screens\add_account_group_screen.dart:58:11 - unused_local_variable
+

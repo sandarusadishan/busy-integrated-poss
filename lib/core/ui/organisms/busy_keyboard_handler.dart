@@ -19,8 +19,9 @@ class BusyKeyboardHandler extends StatelessWidget {
   Widget build(BuildContext context) {
     return Focus(
       focusNode: customFocusNode,
-      autofocus: true,
-      canRequestFocus: false, // Don't take focus from children unless needed
+      autofocus: false,
+      skipTraversal: true,
+      canRequestFocus: false,
       onKeyEvent: (node, event) {
         if (event is KeyDownEvent) {
           if (event.logicalKey == LogicalKeyboardKey.escape) {

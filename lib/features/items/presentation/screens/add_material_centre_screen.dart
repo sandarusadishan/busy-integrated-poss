@@ -5,6 +5,7 @@ import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class AddMaterialCentreScreen extends StatefulWidget {
   const AddMaterialCentreScreen({super.key});
@@ -30,8 +31,10 @@ class _AddMaterialCentreScreenState extends State<AddMaterialCentreScreen> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Expanded(
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.all(16.0),
+                    child: ResponsiveScrollWrapper(
+                      minWidth: 600,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.all(16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -50,12 +53,8 @@ class _AddMaterialCentreScreenState extends State<AddMaterialCentreScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            width: 500,
-                            padding: const EdgeInsets.all(2),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primary),
-                            ),
+                          ResponsiveFormContainer(
+                            maxWidth: 500,
                             child: Column(
                               children: [
                                 _buildFieldSet('General Info', Column(
@@ -97,7 +96,8 @@ class _AddMaterialCentreScreenState extends State<AddMaterialCentreScreen> {
                       ),
                     ),
                   ),
-                  ShortcutPanel(
+                ),
+                ShortcutPanel(
                     items: [
                       ShortcutItem(keyLabel: 'F1', label: 'Help', onTap: () {}),
                       ShortcutItem(keyLabel: 'F1', label: 'Add Account', onTap: () {}),
@@ -156,31 +156,63 @@ class _AddMaterialCentreScreenState extends State<AddMaterialCentreScreen> {
   }
 
   Widget _buildFieldRow(String label, {bool isBlack = false, double? height}) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+
+    Widget inputField = Container(
+      height: height ?? 20,
+      decoration: BoxDecoration(
+        color: isBlack ? Colors.black : Colors.white,
+        border: Border.all(color: Colors.grey),
+      ),
+      child: TextField(
+        style: TextStyle(fontSize: 12, color: isBlack ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+        maxLines: height != null ? null : 1,
+        decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 4), border: InputBorder.none),
+      ),
+    );
+
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.indigo)),
+            const SizedBox(height: 4),
+            inputField,
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1.0),
       child: Row(
         children: [
           SizedBox(width: 180, child: Text(label, style: const TextStyle(fontSize: 12, color: Colors.indigo))),
-          Expanded(
-            child: Container(
-              height: height ?? 20,
-              decoration: BoxDecoration(
-                color: isBlack ? Colors.black : Colors.white,
-                border: Border.all(color: Colors.grey),
-              ),
-              child: TextField(
-                style: TextStyle(fontSize: 12, color: isBlack ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
-                maxLines: height != null ? null : 1,
-                decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 4), border: InputBorder.none),
-              ),
-            ),
-          ),
+          Expanded(child: inputField),
         ],
       ),
     );
   }
 
   Widget _buildToggleRow(String label, String value) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+    
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.indigo)),
+            const SizedBox(height: 4),
+            Text(value, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: Colors.black)),
+          ],
+        ),
+      );
+    }
+    
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 1.0),
       child: Row(

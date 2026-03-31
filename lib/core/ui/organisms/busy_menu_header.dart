@@ -75,75 +75,42 @@ class TreeLinePainter extends CustomPainter {
 }
 
 class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
-  List<Widget> _buildMenuChildren(
+  final Set<String> _expandedNodes = {};
+
+  List<Widget> _buildFlattenedMenuChildren(
     BuildContext context,
     List<MenuNode> nodes, {
-    bool isRoot = false,
     int depth = 0,
     List<bool> parentIsLastList = const [],
-    String rootTitle = '',
+    String pathPrefix = '',
   }) {
     List<Widget> items = [];
     for (int i = 0; i < nodes.length; i++) {
       final node = nodes[i];
       final isLast = i == nodes.length - 1;
+      final nodePath = '$pathPrefix/${node.title}';
+      final isExpanded = _expandedNodes.contains(nodePath);
 
       items.add(_buildMenuItem(
         context,
         node,
-        isRoot: isRoot,
+        isRoot: false,
         depth: depth,
         isLast: isLast,
         parentIsLastList: parentIsLastList,
+        nodePath: nodePath,
+        isExpanded: isExpanded,
       ));
-    }
 
-    if (!isRoot &&
-        depth == 0 &&
-        (rootTitle == 'Administration' || items.length > 5)) {
-      items.add(Container(
-        decoration: const BoxDecoration(
-          color: Color(0xFFF0F0F0),
-          border: Border(top: BorderSide(color: Color(0xFF808080))),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF0F0F0),
-                  foregroundColor: Colors.black,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                  minimumSize: const Size(0, 22),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  side: const BorderSide(color: Color(0xFF808080)),
-                  elevation: 0,
-                  textStyle: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.bold)),
-              onPressed: () {},
-              child: const Text('Add To Favourites'),
-            ),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                  foregroundColor: const Color(0xFF808080),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
-                  minimumSize: const Size(0, 22),
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero),
-                  side: const BorderSide(color: Color(0xFFC0C0C0)),
-                  disabledForegroundColor: const Color(0xFFA0A0A0),
-                  textStyle: const TextStyle(
-                      fontSize: 11, fontWeight: FontWeight.bold)),
-              onPressed: null,
-              child: const Text('Create Shortcut'),
-            ),
-          ],
-        ),
-      ));
+      if (isExpanded && node.children.isNotEmpty) {
+        items.addAll(_buildFlattenedMenuChildren(
+          context,
+          node.children,
+          depth: depth + 1,
+          parentIsLastList: [...parentIsLastList, isLast],
+          pathPrefix: nodePath,
+        ));
+      }
     }
     return items;
   }
@@ -155,6 +122,8 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
     int depth = 0,
     bool isLast = true,
     List<bool> parentIsLastList = const [],
+    String nodePath = '',
+    bool isExpanded = false,
   }) {
     final itemStyle = ButtonStyle(
       foregroundColor: WidgetStateProperty.resolveWith((states) {
@@ -187,10 +156,10 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
         EdgeInsets.only(left: isRoot ? 8 : 4, right: 16),
       ),
       minimumSize: WidgetStateProperty.all(
-        isRoot ? const Size(0, 26) : const Size(220, 22),
+        isRoot ? const Size(0, 26) : const Size(220, 28),
       ),
       maximumSize: WidgetStateProperty.all(
-        isRoot ? const Size(double.infinity, 26) : const Size(280, 22),
+        isRoot ? const Size(double.infinity, 26) : const Size(280, 28),
       ),
       shape: WidgetStateProperty.all(
         const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -201,6 +170,11 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
     final bool isDisabled =
         isRoot && node.title != 'Company' && !authState.isLoggedIn;
     final bool isSeparator = node.title == 'o';
+    final bool isSpacer = node.title == '---';
+
+    if (isSpacer) {
+      return const SizedBox(height: 12); // Invisible vertical gap
+    }
 
     Widget buildIcon(bool isExpanded) {
       if (isRoot) return const SizedBox.shrink();
@@ -211,14 +185,22 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
               Icon(Icons.radio_button_unchecked, size: 7, color: Colors.black),
         );
       }
+      if (node.children.isEmpty) {
+        return const SizedBox(
+          width: 14,
+          child: Icon(
+            Icons.circle,
+            color: Color(0xFFA00000), // Dark red like busy ERP
+            size: 6,
+          ),
+        );
+      }
       return SizedBox(
         width: 14,
         child: Icon(
-          node.children.isNotEmpty
-              ? (isExpanded ? Icons.arrow_drop_down : Icons.play_arrow)
-              : Icons.play_arrow,
-          color: const Color(0xFF008000),
-          size: node.children.isNotEmpty && isExpanded ? 16 : 12,
+          isExpanded ? Icons.arrow_drop_down : Icons.play_arrow,
+          color: const Color(0xFF008000), // Green for folders
+          size: isExpanded ? 16 : 12,
         ),
       );
     }
@@ -232,7 +214,7 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
         children: [
           if (depth > 0)
             CustomPaint(
-              size: Size(16.0 * depth, 22),
+              size: Size(16.0 * depth, 28),
               painter: TreeLinePainter(depth, isLast, parentIsLastList),
             ),
           buildIcon(isExpanded),
@@ -296,31 +278,72 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
       return SubmenuButton(
         focusNode: fNode,
         style: itemStyle,
-        menuChildren: _buildMenuChildren(
-          context,
-          node.children,
-          isRoot: false,
-          depth: 0,
-          rootTitle: node.title,
-        ),
+        menuChildren: (() {
+          List<Widget> children = _buildFlattenedMenuChildren(
+            context,
+            node.children,
+            depth: 0,
+            pathPrefix: node.title,
+          );
+          if (node.title == 'Administration' || children.length > 5) {
+             children.add(Container(
+              decoration: const BoxDecoration(
+                color: Color(0xFFF0F0F0),
+                border: Border(top: BorderSide(color: Color(0xFF808080))),
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                   ElevatedButton(
+                     style: ElevatedButton.styleFrom(
+                         backgroundColor: const Color(0xFFF0F0F0),
+                         foregroundColor: Colors.black,
+                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                         minimumSize: const Size(0, 22),
+                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                         side: const BorderSide(color: Color(0xFF808080)),
+                         elevation: 0,
+                         textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                     onPressed: () {},
+                     child: const Text('Add To Favourites'),
+                   ),
+                   OutlinedButton(
+                     style: OutlinedButton.styleFrom(
+                         foregroundColor: const Color(0xFF808080),
+                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                         minimumSize: const Size(0, 22),
+                         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+                         side: const BorderSide(color: Color(0xFFC0C0C0)),
+                         disabledForegroundColor: const Color(0xFFA0A0A0),
+                         textStyle: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold)),
+                     onPressed: null,
+                     child: const Text('Create Shortcut'),
+                   ),
+                ],
+              ),
+            ));
+          }
+          return children;
+        })(),
         child: buildTreeRow(false),
       );
     }
 
-    return _TreeMenuItem(
-      node: node,
-      itemStyle: itemStyle,
-      depth: depth,
-      isLast: isLast,
-      parentIsLastList: parentIsLastList,
-      buildRow: buildTreeRow,
-      buildChild: (childContext, childNode, childDepth, childIsLast,
-              childParentIsLastList) =>
-          _buildMenuItem(childContext, childNode,
-              isRoot: false,
-              depth: childDepth,
-              isLast: childIsLast,
-              parentIsLastList: childParentIsLastList),
+    // This is a flattened tree menu item (parent with children that toggles expansion rather than navigating)
+    return MenuItemButton(
+      closeOnActivate: false,
+      style: itemStyle,
+      onPressed: () {
+        setState(() {
+          if (_expandedNodes.contains(nodePath)) {
+            _expandedNodes.remove(nodePath);
+          } else {
+            _expandedNodes.add(nodePath);
+          }
+        });
+      },
+      child: buildTreeRow(isExpanded),
     );
   }
 
@@ -371,105 +394,17 @@ class _BusyMenuHeaderState extends ConsumerState<BusyMenuHeader> {
                         fontWeight: FontWeight.bold)),
               ),
               Expanded(
-                child: MenuBar(
-                  children: _buildMenuChildren(context, appMenus, isRoot: true),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: MenuBar(
+                    children: appMenus.map((n) => _buildMenuItem(context, n, isRoot: true)).toList(),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-}
-
-class _TreeMenuItem extends StatefulWidget {
-  final MenuNode node;
-  final ButtonStyle itemStyle;
-  final Widget Function(bool isExpanded) buildRow;
-  final Widget Function(BuildContext, MenuNode, int, bool, List<bool>)
-      buildChild;
-  final int depth;
-  final bool isLast;
-  final List<bool> parentIsLastList;
-
-  const _TreeMenuItem({
-    required this.node,
-    required this.itemStyle,
-    required this.buildRow,
-    required this.buildChild,
-    required this.depth,
-    required this.isLast,
-    required this.parentIsLastList,
-  });
-
-  @override
-  State<_TreeMenuItem> createState() => _TreeMenuItemState();
-}
-
-class _TreeMenuItemState extends State<_TreeMenuItem> {
-  bool _isExpanded = false;
-  late final FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.node.title == 'Masters') {
-      _isExpanded = true;
-    }
-    _focusNode = FocusNode(debugLabel: widget.node.title);
-    _focusNode.onKeyEvent = (node, event) {
-      if (event is KeyDownEvent || event is KeyRepeatEvent) {
-        if (event.logicalKey == LogicalKeyboardKey.arrowRight && !_isExpanded) {
-          setState(() => _isExpanded = true);
-          return KeyEventResult.handled;
-        } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft &&
-            _isExpanded) {
-          setState(() => _isExpanded = false);
-          return KeyEventResult.handled;
-        }
-      }
-      return KeyEventResult.ignored;
-    };
-  }
-
-  @override
-  void dispose() {
-    _focusNode.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        MenuItemButton(
-          focusNode: _focusNode,
-          style: widget.itemStyle,
-          onPressed: () {
-            setState(() {
-              _isExpanded = !_isExpanded;
-            });
-          },
-          closeOnActivate: false,
-          child: widget.buildRow(_isExpanded),
-        ),
-        if (_isExpanded)
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            mainAxisSize: MainAxisSize.min,
-            children: List.generate(widget.node.children.length, (index) {
-              final childNode = widget.node.children[index];
-              final isLastChild = index == widget.node.children.length - 1;
-              final newParentIsLastList =
-                  List<bool>.from(widget.parentIsLastList)..add(widget.isLast);
-              return widget.buildChild(context, childNode, widget.depth + 1,
-                  isLastChild, newParentIsLastList);
-            }),
-          ),
-      ],
     );
   }
 }

@@ -12,6 +12,10 @@ class ShortcutPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (MediaQuery.of(context).size.width < 800) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       width: 140, // Fixed width for sidebar
       color: const Color(0xFFF0F0F0), // Light grey background

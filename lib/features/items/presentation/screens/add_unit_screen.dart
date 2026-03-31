@@ -5,6 +5,7 @@ import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class AddUnitScreen extends StatefulWidget {
   const AddUnitScreen({super.key});
@@ -29,12 +30,10 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
                             child: Container(
                               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 2),
                               decoration: BoxDecoration(
@@ -48,16 +47,13 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                             ),
                           ),
                           const SizedBox(height: 16),
-                          Container(
-                            width: 350,
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primary),
-                              color: AppColors.background,
-                            ),
-                            child: Column(
-                              children: [
-                                _buildFieldRow('Unit Name', isBlack: true),
+                          ResponsiveFormContainer(
+                            maxWidth: 350,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                children: [
+                                  _buildFieldRow('Unit Name', isBlack: true),
                                 _buildFieldRow('Alias'),
                                 _buildFieldRow('Print Name'),
                                 const SizedBox(height: 16),
@@ -70,12 +66,12 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
                                   ],
                                 )
                               ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                  ),
                   ShortcutPanel(
                     items: [
                       ShortcutItem(keyLabel: 'F1', label: 'Help', onTap: () {}),
@@ -95,24 +91,40 @@ class _AddUnitScreenState extends State<AddUnitScreen> {
   }
 
   Widget _buildFieldRow(String label, {bool isBlack = false}) {
+    bool isMobile = MediaQuery.of(context).size.width < 600;
+
+    Widget inputField = Container(
+      height: 20,
+      decoration: BoxDecoration(
+        color: isBlack ? Colors.black : Colors.white,
+        border: Border.all(color: Colors.grey),
+      ),
+      child: TextField(
+        style: TextStyle(fontSize: 12, color: isBlack ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
+        decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 4), border: InputBorder.none),
+      ),
+    );
+
+    if (isMobile) {
+      return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(label, style: const TextStyle(fontSize: 12, color: Colors.indigo)),
+            const SizedBox(height: 4),
+            inputField,
+          ],
+        ),
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 2.0),
       child: Row(
         children: [
           SizedBox(width: 100, child: Text(label, style: const TextStyle(fontSize: 12, color: Colors.indigo))),
-          Expanded(
-            child: Container(
-              height: 20,
-              decoration: BoxDecoration(
-                color: isBlack ? Colors.black : Colors.white,
-                border: Border.all(color: Colors.grey),
-              ),
-              child: TextField(
-                style: TextStyle(fontSize: 12, color: isBlack ? Colors.white : Colors.black, fontWeight: FontWeight.bold),
-                decoration: const InputDecoration(isDense: true, contentPadding: EdgeInsets.symmetric(horizontal: 4), border: InputBorder.none),
-              ),
-            ),
-          ),
+          Expanded(child: inputField),
         ],
       ),
     );

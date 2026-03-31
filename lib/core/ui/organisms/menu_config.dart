@@ -79,8 +79,43 @@ const List<MenuNode> appMenus = [
           ]),
         ],
       ),
-      MenuNode(title: 'Configuration'),
-      MenuNode(title: 'Users'),
+      MenuNode(title: 'Configuration', children: [
+        MenuNode(title: 'Features / Options', route: '/configuration/features-options'),
+        MenuNode(title: 'Voucher Series Configuration'),
+        MenuNode(title: 'Masters Configuration'),
+        MenuNode(title: 'Hardware Configuration'),
+        MenuNode(title: 'User Dash Board Configuration'),
+        MenuNode(title: 'Party Dash Board Configuration'),
+        MenuNode(title: 'Email Configuration'),
+        MenuNode(title: 'SMS API Configuration'),
+        MenuNode(title: 'Backup Configuration'),
+        MenuNode(title: 'o'),
+        MenuNode(title: 'Invoice / Document Printing', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'Accounting Voucher Printing', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'Columnar Reports', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'Letters Text Configuration'),
+        MenuNode(title: 'Labels Printing Configuration'),
+        MenuNode(title: 'References/Group Summary Printing Conf', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'Report Header Printing'),
+        MenuNode(title: 'Item Details Printing in Reports'),
+        MenuNode(title: 'Final Results Configuration'),
+        MenuNode(title: 'o'),
+        MenuNode(title: 'Warning Alarms'),
+        MenuNode(title: 'Maximum Entries in Voucher'),
+        MenuNode(title: 'Ageing Analysis Time Slabs', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'Interest Calculation Slabs', children: [MenuNode(title: 'Standard')]),
+        MenuNode(title: 'o'),
+        MenuNode(title: 'Party-wise Item Filter'),
+        MenuNode(title: 'Tag Bill Sundries Voucher-wise'),
+        MenuNode(title: 'Tag Bill Sundry Values Party-wise'),
+        MenuNode(title: 'o'),
+        MenuNode(title: 'List of Holidays'),
+      ]),
+      MenuNode(title: 'Users', children: [
+        MenuNode(title: 'Add'),
+        MenuNode(title: 'Modify'),
+        MenuNode(title: 'List'),
+      ]),
       MenuNode(title: 'Utilities'),
       MenuNode(title: 'Bulk Updations'),
       MenuNode(title: 'Data Export Import'),
@@ -91,16 +126,7 @@ const List<MenuNode> appMenus = [
   MenuNode(
     title: 'Transactions',
     children: [
-      MenuNode(title: 'Sales Quotation', children: [
-        MenuNode(title: 'Add', route: '/transaction/Sales-Quotation'),
-        MenuNode(title: 'Modify'),
-        MenuNode(title: 'List'),
-      ]),
-      MenuNode(title: 'Purchase Quotation', children: [
-        MenuNode(title: 'Add', route: '/transaction/Purchase-Quotation'),
-        MenuNode(title: 'Modify'),
-        MenuNode(title: 'List'),
-      ]),
+
       MenuNode(title: 'Sales Order', children: [
         MenuNode(title: 'Add', route: '/transaction/Sales-Order'),
         MenuNode(title: 'Modify'),
@@ -111,6 +137,7 @@ const List<MenuNode> appMenus = [
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
+      const MenuNode(title: '---'),
       MenuNode(title: 'Sales', children: [
         MenuNode(title: 'Add', route: '/transaction/Sales'),
         MenuNode(title: 'Modify'),
@@ -132,6 +159,7 @@ const List<MenuNode> appMenus = [
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
+      const MenuNode(title: '---'),
       MenuNode(title: 'Payment', children: [
         MenuNode(title: 'Add', route: '/transaction/Payment'),
         MenuNode(title: 'Modify'),
@@ -162,6 +190,7 @@ const List<MenuNode> appMenus = [
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
+      const MenuNode(title: '---'),
       MenuNode(title: 'Stock Transfer', children: [
         MenuNode(title: 'Add', route: '/transaction/Stock-Transfer'),
         MenuNode(title: 'Modify'),
@@ -172,26 +201,24 @@ const List<MenuNode> appMenus = [
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
-      MenuNode(title: 'Unassemble', children: [
-        MenuNode(title: 'Add', route: '/transaction/Unassemble'),
-        MenuNode(title: 'Modify'),
-        MenuNode(title: 'List'),
-      ]),
+
       MenuNode(title: 'Stock Journal', children: [
         MenuNode(title: 'Add', route: '/transaction/Stock-Journal'),
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
-      MenuNode(title: 'Mat. Issued to Party', children: [
-        MenuNode(title: 'Add', route: '/transaction/Mat.-Issued-to-Party'),
+      const MenuNode(title: '---'),
+      MenuNode(title: 'Delivery Order', children: [
+        MenuNode(title: 'Add', route: '/transaction/Delivery-Order'),
+        MenuNode(title: 'Modify'),
+        MenuNode(title: 'List'), 
+      ]),
+      MenuNode(title: 'Good Receved Note', children: [
+        MenuNode(title: 'Add', route: '/transaction/Good-Receved-Note'),
         MenuNode(title: 'Modify'),
         MenuNode(title: 'List'),
       ]),
-      MenuNode(title: 'Mat. Rcvd. from Party', children: [
-        MenuNode(title: 'Add', route: '/transaction/Mat.-Rcvd.-from-Party'),
-        MenuNode(title: 'Modify'),
-        MenuNode(title: 'List'),
-      ]),
+      const MenuNode(title: '---'),
       MenuNode(title: 'Physical Stock', children: [
         MenuNode(title: 'Add', route: '/transaction/Physical-Stock'),
         MenuNode(title: 'Modify'),

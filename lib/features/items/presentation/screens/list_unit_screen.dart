@@ -5,6 +5,7 @@ import '../../../../core/ui/organisms/busy_menu_header.dart';
 import '../../../../core/ui/organisms/busy_keyboard_handler.dart';
 import '../../../../core/ui/organisms/shortcut_panel.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/ui/organisms/responsive_wrappers.dart';
 
 class ListUnitScreen extends StatefulWidget {
   const ListUnitScreen({super.key});
@@ -44,8 +45,10 @@ class _ListUnitScreenState extends State<ListUnitScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+                    child: ResponsiveScrollWrapper(
+                      minWidth: 600,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
                       child: Column(
                         children: [
                           Container(
@@ -109,7 +112,8 @@ class _ListUnitScreenState extends State<ListUnitScreen> {
                       ),
                     ),
                   ),
-                  ShortcutPanel(items: [], onHelp: () {})
+                ),
+                ShortcutPanel(items: [], onHelp: () {})
                 ],
               ),
             ),
